@@ -1,45 +1,56 @@
-🚀 LeanOps: AI-Powered Document Intelligence Pipeline
-Built to help small businesses eliminate manual data entry through Serverless AI.
+# 🚀 LeanOps — AI-Powered Document Intelligence Pipeline
 
-💡 The Problem
-Small companies often waste 10+ hours a week manually entering data from PDFs (invoices, contracts, applications) into spreadsheets. Hiring a human for this is expensive; traditional software is too rigid to handle different document layouts.
+**LeanOps** is a serverless, event-driven document processing pipeline designed to help small businesses **eliminate manual data entry** using AI.
 
-✅ The Solution
-An event-driven, serverless pipeline that uses Amazon Bedrock and Textract to "read" unstructured PDFs and convert them into structured data automatically.
+It automatically converts unstructured PDFs (invoices, contracts, applications) into clean, structured data — with **no servers to manage** and **near-zero operational overhead**.
 
-Cost: ~$0.01 per document.
+---
 
-Maintenance: Zero server management.
+## 💡 The Problem
 
-Speed: From upload to database in < 10 seconds.
+Small companies often waste **10+ hours per week** manually entering data from PDFs into spreadsheets.
 
-🛠️ Tech Stack
-AWS Lambda: Orchestrates the flow.
+- Hiring human operators is expensive and does not scale  
+- Traditional OCR software breaks on varying document layouts  
+- Inconsistent vendor formats lead to errors and rework  
 
-Amazon Textract: Extracts raw text from complex PDF layouts.
+---
 
-Amazon Bedrock (Claude 3.5 Sonnet): Intelligently parses text into clean JSON.
+## ✅ The Solution
 
-Amazon DynamoDB: Stores extracted data for dashboarding.
+LeanOps uses **AWS serverless services and LLM reasoning** to extract, understand, and structure data from messy PDFs automatically.
 
-Amazon S3: Trigger-point for the automated workflow.
+**Key benefits:**
 
-🏗️ Architecture
-🚀 Quick Start
-Clone the repo: git clone https://github.com/ramiro85/leanops-ai
+- 💸 **Cost:** ~**$0.01 per document**
+- ⚙️ **Maintenance:** Zero server management
+- ⚡ **Speed:** From upload to database in **< 10 seconds**
+- 🧠 **Intelligence:** Uses AI reasoning, not rigid templates
 
-Deploy: Use the provided CloudFormation template to spin up the S3 bucket and Lambda.
+---
 
-Configure: Request model access in the Amazon Bedrock console.
+## 🛠️ Tech Stack
 
-Test: Drop a messy invoice PDF into the inbox/ folder in S3.
+- **AWS Lambda** – Orchestrates the event-driven workflow  
+- **Amazon Textract** – Extracts raw text from complex PDF layouts  
+- **Amazon Bedrock (Claude 3.5 Sonnet)** – Parses text into clean, structured JSON  
+- **Amazon DynamoDB** – Stores extracted data for analytics and dashboards  
+- **Amazon S3** – Entry point and trigger for the automation pipeline  
 
-📊 Business Impact
-Headcount Efficiency: One operations manager can now handle 5x the volume of documents.
+---
 
-Scalability: Handles 1 document or 10,000 documents with the same codebase.
+## 🏗️ Architecture
 
-Accuracy: Uses LLM reasoning to identify "Total Amount Due" even if the label varies across vendors.
+1. PDF uploaded to **S3**
+2. S3 event triggers **Lambda**
+3. Lambda calls **Textract** for text extraction
+4. Extracted text is passed to **Bedrock (LLM)** for semantic parsing
+5. Clean JSON is stored in **DynamoDB**
+6. Data becomes immediately available for downstream systems
 
-**Cost Breakdown**
-At current AWS rates, processing 1,000 invoices costs less than a cup of coffee. Compare that to 20 hours of manual labor at $20/hr ($400).
+---
+
+## 🚀 Quick Start
+
+```bash
+git clone https://github.com/ramiro85/leanops-ai
