@@ -22,7 +22,7 @@ LeanOps uses **AWS serverless services and LLM reasoning** to extract, understan
 
 **Key benefits:**
 
-- 💸 **Cost:** ~**$0.01 per document**
+- 💸 **Cost:** ~**$0.02 per document**
 - ⚙️ **Maintenance:** Zero server management
 - ⚡ **Speed:** From upload to database in **< 10 seconds**
 - 🧠 **Intelligence:** Uses AI reasoning, not rigid templates
