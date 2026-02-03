@@ -1,0 +1,13 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "leanops-ai"
+resolve_s3 = true
+s3_prefix = "leanops-ai"
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []
+confirm_changeset = true
+
+[default.global.parameters]
+region = "us-east-1"

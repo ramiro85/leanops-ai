@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: LeanOps - AI-powered logistics document processing pipeline
+
+Resources:
+  # 1. THE DATABASE
+  LeanOpsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: ExtractedRatesConf
+      PrimaryKey:
+        Name: reference_number
+        Type: String
+
+  # 2. THE STORAGE
+  LeanOpsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "leanops-inbox-${AWS::AccountId}-v4"
+
+  # 3. THE BRAIN (Lambda Function)
+  ProcessInvoiceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/          # Point this to your folder containing app.py
+      Handler: app.lambda_handler
+      Runtime: python3.10
+      MemorySize: 512           # 512 for better performance
+      Timeout: 45               # Giving Bedrock time to think
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref LeanOpsTable
+
+      # 4. THE PERMISSIONS
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub "leanops-inbox-${AWS::AccountId}-v4"
+        - DynamoDBWritePolicy:
+            TableName: !Ref LeanOpsTable
+        - TextractPolicy: { }
+        - Statement:
+            - Sid: BedrockInvokePolicy
+              Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
+              Resource:
+                - "arn:aws:bedrock:*::foundation-model/anthropic.claude-3-5-sonnet*"
+                - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/us.anthropic.claude-3-5-sonnet*"
+
+      # 5. THE TRIGGER (Magic: S3 upload kicks off the Lambda)
+      Events:
+        NewInvoiceEvent:
+          Type: S3
+          Properties:
+            Bucket: !Ref LeanOpsBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: .pdf
+
+Outputs:
+  BucketName:
+    Description: "Upload PDFs here"
+    Value: !Ref LeanOpsBucket
+  TableName:
+    Description: "Extracted data is stored here"
+    Value: !Ref LeanOpsTable

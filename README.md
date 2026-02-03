@@ -54,3 +54,10 @@ LeanOps uses **AWS serverless services and LLM reasoning** to extract, understan
 
 ```bash
 git clone https://github.com/ramiro85/leanops-ai
+cd leanops-ai
+
+# Build the project (use-container ensures dependencies match Lambda's environment)
+sam build --use-container
+
+# Deploy the stack (first time use --guided)
+sam deploy --guided
